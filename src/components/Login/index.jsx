@@ -5,14 +5,33 @@ import { Card } from 'react-bootstrap';
 class Login extends Component {
     constructor (props) {
         super();
-    
+        this.state={
+            email:'',
+            password:''
+        }
+        // commenting uncontrolled component code 
         // this.emailReference = React.createRef();
         // this.passwordReference = React.createRef();
     }
 
+    handleEmail = (e) => {
+        this.setState({
+            email:e.target.value
+        })
+    }
+
+    handlePassword = (e) => {
+        this.setState({
+            password:e.target.value
+        })
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(this.emailReference.current.value, this.passwordReference.current.value);
+        console.log(this.state);
+
+        // commenting uncontrolled component code 
+        // console.log(this.emailReference.current.value, this.passwordReference.current.value);
     }
 
     render() {
@@ -35,7 +54,9 @@ class Login extends Component {
                                     className="form-control"
                                     id="floatingInput"
                                     placeholder="name@example.com"
-                                    ref={this.emailReference}
+                                    // ref={this.emailReference}
+                                    value={this.email}
+                                    onChange={this.handleEmail}
                                 />
                                 <label htmlFor="floatingInput">Email address</label>
                             </div>
@@ -45,7 +66,10 @@ class Login extends Component {
                                     className="form-control"
                                     id="floatingPassword"
                                     placeholder="Password"
-                                    ref={this.passwordReference}
+                                    // ref={this.passwordReference}
+                                    value={this.password}
+                                    onChange={this.handlePassword}
+
                                 />
                                 <label htmlFor="floatingPassword">Password</label>
                             </div>
