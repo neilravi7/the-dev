@@ -2,15 +2,16 @@ import React from 'react';
 // import './App.css'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { propTypes } from 'react-bootstrap/esm/Image';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 // actions
 import { fetchPosts } from './actions/posts';
 
 //Components 
-import PostList from './components/PostList';
+import Home from './components/Home';
+import Page404 from './components/Page404';
+import Login from './components/Login';
 import Navigation from './components/Navigation';
 
 class App extends React.Component {
@@ -22,12 +23,27 @@ class App extends React.Component {
   render() {
     const { posts } = this.props;
     return (
-      <Router>
+      <React.Fragment>
         <Navigation></Navigation>
         <div className="container px-4 px-lg-5">
-          <PostList posts={posts}></PostList>
+          <Router>
+            <Routes>
+              <Route 
+                path="/" 
+                element={<Home posts={posts}/>}
+              />
+              <Route 
+                path="*" 
+                element={<Page404 />}
+              />
+              <Route 
+                path="/login" 
+                element={<Login />}
+              />
+            </Routes>
+          </Router>
         </div>
-      </Router>
+      </React.Fragment>
     )
   }
 }
@@ -38,8 +54,8 @@ function mapStateToProps(state) {
   }
 }
 
-App.PropTypes={
-  posts:PropTypes.array.isRequired
+App.PropTypes = {
+  posts: PropTypes.array.isRequired
 }
 
 const ConnectedApp = connect(mapStateToProps)(App);
