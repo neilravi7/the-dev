@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './login.css'
 import { Card } from 'react-bootstrap';
+import { login } from '../../actions/auth';
+import { connect } from 'react-redux';
 
 class Login extends Component {
     constructor (props) {
@@ -28,18 +30,29 @@ class Login extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state);
+        
+        const {email, password} = this.state;
+
+        if(email && password){
+            this.props.dispatch(login(email, password));
+        }
 
         // commenting uncontrolled component code 
         // console.log(this.emailReference.current.value, this.passwordReference.current.value);
     }
 
     render() {
+        const {error, inProgress} = this.props.auth;
+        // console.log("error, inProgress", error, inProgress);
         return (
             <main className="form-signin w-100 m-auto">
                 <Card>
                     <Card.Body>
-                        <h1 className="h3 mb-3 fw-normal text-center">Please sign in</h1>
+                        <h1 className="h3 mb-3 fw-normal text-primary">Login</h1>
+
+                        {error && <><div className='d-flex justify-content-center rounded bg-danger my-3'><p className="m-2 text-light">{error}</p> </div></>}
+
+
                         <form>
                             {/* <img
                         className="mb-4"
@@ -78,10 +91,12 @@ class Login extends Component {
                                     <input type="checkbox" defaultValue="remember-me" /> Remember me
                                 </label> */}
                             </div>
-                            <button className="w-100 btn btn-lg btn-primary" type="submit" onClick={this.handleSubmit}>
+                            <button 
+                                className={`w-100 btn btn-lg btn-primary`} type="submit" onClick={this.handleSubmit} disabled={inProgress}>
                                 Sign in
                             </button>
                             {/* <p className="mt-5 mb-3 text-muted">© 2017–2022</p> */}
+                            
                         </form>
                     </Card.Body>
                 </Card>
@@ -92,4 +107,11 @@ class Login extends Component {
     }
 }
 
-export default Login;
+function mapStateToProp(state){
+    return{
+        auth:state.auth
+    }
+}
+
+const ConnectedLogin = connect(mapStateToProp)(Login)
+export default ConnectedLogin;

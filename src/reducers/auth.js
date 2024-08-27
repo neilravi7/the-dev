@@ -13,7 +13,7 @@ export default function auth(state = initialState, action){
         case LOGIN_START:
             return{ 
                 ...state, 
-                inProgress:true,
+                inProgress:false,
             }
         
         case LOGIN_SUCCESS:
