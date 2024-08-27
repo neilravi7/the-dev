@@ -1,7 +1,15 @@
-import { LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILED } from "./actionType";
+import { 
+  LOGIN_START, 
+  LOGIN_SUCCESS, 
+  LOGIN_FAILED, 
+  AUTHENTICATE_USER, 
+  LOGOUT_USER 
+} from "./actionType";
+
 import { API_URL } from "../helpers/urls";
 import { requestCreator } from "../helpers/utils";
 import { getUser } from "../helpers/utils";
+
 export function startLogin() {
   return {
     type: LOGIN_START,
@@ -63,6 +71,19 @@ export function login(email, password) {
         }, 3000);
       });
   };
+}
+
+export function authenticateUser(user){
+  return{
+    type:AUTHENTICATE_USER,
+    user
+  }
+}
+
+export function logoutUser(){
+  return{
+    type:LOGOUT_USER
+  }
 }
 
 // fetch("http://127.0.0.1:8000/api/v1/users/login", requestOptions)

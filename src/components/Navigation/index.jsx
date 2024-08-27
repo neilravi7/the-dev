@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 
 // Bootstrap Component
@@ -8,10 +9,21 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 // import NavDropdown from 'react-bootstrap/NavDropdown';
 import { VscTerminal } from "react-icons/vsc";
-import { Dropdown } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { logoutUser } from '../../actions/auth';
 
 class Navigation extends Component {
+  
+  handleLogout = () =>{
+    this.props.dispatch(logoutUser());
+    window.localStorage.removeItem('access');
+    window.localStorage.removeItem('refresh');
+    // window.location = '/';
+  }
+
   render() {
+    const {isLoggedIn} = this.props.auth;
     return (
       <Navbar expand="lg" className="bg-primary p-3">
         <Container fluid>
@@ -42,14 +54,20 @@ class Navigation extends Component {
               </Dropdown>
             </Nav>
             <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-              <div className="text-end">
-                <button type="button" className="btn btn-outline-light me-2">
+              {!isLoggedIn ? (<div className="text-end">
+                <Link to={'/login'} className="btn btn-outline-light me-2">
                   Login
-                </button>
-                <button type="button" className="btn btn-warning">
+                </Link>
+                <Link to={"/sign-up"} className="btn btn-warning">
                   Sign-up
-                </button>
-              </div>
+                </Link>
+              </div>):(
+                <>
+                <Button className="btn btn-light" onClick={() => this.handleLogout()}>
+                  Logout
+                </Button>
+                </>
+              )}
             </div>
           </Navbar.Collapse>
         </Container>
@@ -58,8 +76,10 @@ class Navigation extends Component {
   }
 }
 
-// Navigation.propTypes = {
-
-// };
-
-export default Navigation;
+function mapStateToProp(state){
+  return{
+    auth:state.auth, 
+  }
+}
+const ConnectedNavigation = connect(mapStateToProp)(Navigation);
+export default ConnectedNavigation;
