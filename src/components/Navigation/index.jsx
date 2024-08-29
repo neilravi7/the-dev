@@ -19,7 +19,7 @@ class Navigation extends Component {
     this.props.dispatch(logoutUser());
     window.localStorage.removeItem('access');
     window.localStorage.removeItem('refresh');
-    // window.location = '/';
+    // window.location = '/'; 
   }
 
   render() {
@@ -31,7 +31,7 @@ class Navigation extends Component {
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
-              className="me-auto my-2 my-lg-0"
+              className="m-auto my-2 my-lg-0"
               navbarScroll
             >
               <Dropdown className="d-inline mx-2" autoClose="inside">

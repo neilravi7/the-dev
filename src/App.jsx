@@ -16,6 +16,9 @@ import Navigation from './components/Navigation';
 import SignUp from './components/SignUp';
 import { getUser } from './helpers/utils';
 import { authenticateUser } from './actions/auth';
+import Profile from './components/Profile';
+import PrivateRoute from './components/PrivateRoute';
+
 
 class App extends React.Component {
 
@@ -32,6 +35,7 @@ class App extends React.Component {
 
   render() {
     const { posts } = this.props;
+    const {isLoggedIn} = this.props.auth;
     return (
       <React.Fragment>
         <Navigation></Navigation>
@@ -53,6 +57,11 @@ class App extends React.Component {
                 path="/sign-up" 
                 element={<SignUp />}
               />
+              
+              <Route element={<PrivateRoute isLoggedIn={isLoggedIn}/>}>
+                <Route path='/profile' element={<Profile/>} />
+              </Route>
+            
             </Routes>
         </div>
       </React.Fragment>
@@ -62,7 +71,8 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    posts: state.posts
+    posts: state.posts,
+    auth:state.auth,
   }
 }
 

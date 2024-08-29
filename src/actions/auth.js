@@ -3,7 +3,8 @@ import {
   LOGIN_SUCCESS, 
   LOGIN_FAILED, 
   AUTHENTICATE_USER, 
-  LOGOUT_USER 
+  LOGOUT_USER, 
+  CLEAR_AUTH_STATE
 } from "./actionType";
 
 import { API_URL } from "../helpers/urls";
@@ -67,7 +68,7 @@ export function login(email, password) {
 
         setTimeout(() => {
             console.log('Resetting login state now...');
-            dispatch(startLogin());
+            dispatch(clearAuthState());
         }, 3000);
       });
   };
@@ -83,6 +84,12 @@ export function authenticateUser(user){
 export function logoutUser(){
   return{
     type:LOGOUT_USER
+  }
+}
+
+export function clearAuthState(){
+  return{
+    type:CLEAR_AUTH_STATE,
   }
 }
 

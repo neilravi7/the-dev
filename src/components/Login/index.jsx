@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './login.css'
 import { Card } from 'react-bootstrap';
-import { login } from '../../actions/auth';
+import { clearAuthState, login } from '../../actions/auth';
 import { connect } from 'react-redux';
 
 class Login extends Component {
@@ -9,7 +9,8 @@ class Login extends Component {
         super();
         this.state={
             email:'',
-            password:''
+            password:'',
+            formError:undefined,
         }
         // commenting uncontrolled component code 
         // this.emailReference = React.createRef();
@@ -35,14 +36,28 @@ class Login extends Component {
 
         if(email && password){
             this.props.dispatch(login(email, password));
+        }else{
+            this.setState({
+                formError:'All fields are password required'
+            });
         }
 
         // commenting uncontrolled component code 
         // console.log(this.emailReference.current.value, this.passwordReference.current.value);
     }
 
+    componentWillUnmount() {
+        console.log("component will unmount");
+        this.props.dispatch(clearAuthState());
+        this.setState({
+            formError:null
+        });
+    }
+    
+
     render() {
         const {error, inProgress} = this.props.auth;
+        const {formError} = this.state;
         // console.log("error, inProgress", error, inProgress);
         return (
             <main className="form-signin w-100 m-auto">
@@ -51,7 +66,7 @@ class Login extends Component {
                         <h1 className="h3 mb-3 fw-normal text-primary">Login</h1>
 
                         {error && <><div className='d-flex justify-content-center rounded bg-danger my-3'><p className="m-2 text-light">{error}</p> </div></>}
-
+                        {formError && <><div className='d-flex justify-content-center rounded bg-danger my-3'><p className="m-2 text-light">{formError}</p> </div></>}
 
                         <form>
                             {/* <img
@@ -62,7 +77,7 @@ class Login extends Component {
                         height={57}
                     /> */}
                             <div className="form-floating mb-3">
-                                <input
+                                <input  
                                     type="email"
                                     className="form-control"
                                     id="floatingInput"
