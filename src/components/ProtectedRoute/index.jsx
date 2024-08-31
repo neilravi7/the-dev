@@ -1,17 +1,35 @@
-import { useNavigate , Outlet } from 'react-router-dom'
+import { useSelector } from "react-redux";
+import { Navigate, useLocation, Outlet } from "react-router-dom";
 
-const PrivateRoute = ({ isLoggedIn }) => {
-    
-    // approach that work
-    const navigate = useNavigate();
-        
-    if(isLoggedIn){
-        return <Outlet/>;
-    }else{
-        navigate("/login")
+const ProtectedRoute = () => {
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    let location = useLocation();
+    console.log("isLoggedIn : ", isLoggedIn);
+    if(!isLoggedIn) {
+        console.log("isLoggedIn in if block : ", isLoggedIn);
+        return <Navigate to="/login" state={{ from: location}} replace />
     }
+    return <Outlet/>
 };
-export default PrivateRoute;
+
+export default ProtectedRoute;
+// import { useNavigate , Outlet } from 'react-router-dom'
+// import Login from '../Login'
+
+// const PrivateRoute = ({ isLoggedIn }) => {
+    
+//     // approach that work
+//     const navigate = useNavigate();
+        
+//     if(isLoggedIn){
+//         return <Outlet/>;
+//     }else{
+//         return <Login />
+//     }
+// };
+// export default PrivateRoute;
+
+
 
 // Approach 2 that is not working 
 // import { Navigate, Outlet } from 'react-router-dom'

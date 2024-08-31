@@ -58,7 +58,6 @@ export function login(email, password) {
         const { email, user_id, first_name, last_name } = getUser();
         const user = { email, user_id, first_name, last_name };
         dispatch(successLogin(user));
-        window.location = "/";
       })
       .catch((error) => {
         console.error(error.message);

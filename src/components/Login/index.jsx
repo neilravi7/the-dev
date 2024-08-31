@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './login.css'
 import { Card } from 'react-bootstrap';
 import { clearAuthState, login } from '../../actions/auth';
 import { connect } from 'react-redux';
+
+import withRouter from '../../helpers/withRouter';
+import { Navigate } from 'react-router-dom';
 
 class Login extends Component {
     constructor (props) {
@@ -31,11 +34,14 @@ class Login extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        
+        const nextLocation = this.props.location?.from?.pathname || '/';
+        console.log("nextLocation", nextLocation);
+
         const {email, password} = this.state;
 
         if(email && password){
-            this.props.dispatch(login(email, password));
+            this.props.dispatch(login(email, password, nextLocation));
+            
         }else{
             this.setState({
                 formError:'All fields are password required'
@@ -56,9 +62,13 @@ class Login extends Component {
     
 
     render() {
-        const {error, inProgress} = this.props.auth;
+        const {error, inProgress, isLoggedIn } = this.props.auth;
+
+        if(isLoggedIn){
+            const nextLocation = this.props.location?.from?.pathname || '/';
+            return<Navigate to={nextLocation}/>
+        }
         const {formError} = this.state;
-        // console.log("error, inProgress", error, inProgress);
         return (
             <main className="form-signin w-100 m-auto">
                 <Card>
@@ -128,5 +138,5 @@ function mapStateToProp(state){
     }
 }
 
-const ConnectedLogin = connect(mapStateToProp)(Login)
+const ConnectedLogin = connect(mapStateToProp)(withRouter(Login))
 export default ConnectedLogin;

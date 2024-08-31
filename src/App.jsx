@@ -2,7 +2,7 @@ import React from 'react';
 // import './App.css'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
 // actions
@@ -17,7 +17,8 @@ import SignUp from './components/SignUp';
 import { getUser } from './helpers/utils';
 import { authenticateUser } from './actions/auth';
 import Profile from './components/Profile';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 class App extends React.Component {
@@ -25,45 +26,52 @@ class App extends React.Component {
   componentDidMount() {
     this.props.dispatch(fetchPosts());
     const user = getUser();
-    
-    if(user){
-      const {user_id:id, email, first_name, last_name } = user;
-      this.props.dispatch(authenticateUser({id, email, first_name, last_name }))
-    } 
+
+    if (user) {
+      const { user_id: id, email, first_name, last_name } = user;
+      this.props.dispatch(authenticateUser({ id, email, first_name, last_name }))
+    }
 
   }
 
   render() {
     const { posts } = this.props;
-    const {isLoggedIn} = this.props.auth;
+    const { isLoggedIn } = this.props.auth;
     return (
       <React.Fragment>
-        <Navigation></Navigation>
-        <div className="container px-4 px-lg-5">
+        <BrowserRouter>
+          <Navigation></Navigation>
+          <div className="container px-4 px-lg-5">
             <Routes>
-              <Route 
-                path="/" 
-                element={<Home posts={posts}/>}
+              <Route
+                path="/"
+                element={<Home posts={posts} />}
               />
-              <Route 
-                path="*" 
+              <Route
+                path="*"
                 element={<Page404 />}
               />
-              <Route 
-                path="/login" 
+              <Route
+                path="/login"
                 element={<Login />}
               />
-              <Route 
-                path="/sign-up" 
+              <Route
+                path="/sign-up"
                 element={<SignUp />}
               />
-              
-              <Route element={<PrivateRoute isLoggedIn={isLoggedIn}/>}>
-                <Route path='/profile' element={<Profile/>} />
+
+              {/* <ProtectedRoute>
+                  <Route path='/profile' element={<Profile />} />
+              </ProtectedRoute> */}
+              <Route element={<ProtectedRoute/>}>
+                <Route path='/profile' element={<Profile />} />
               </Route>
-            
+
+
+
             </Routes>
-        </div>
+          </div>
+        </BrowserRouter>
       </React.Fragment>
     )
   }
@@ -72,7 +80,7 @@ class App extends React.Component {
 function mapStateToProps(state) {
   return {
     posts: state.posts,
-    auth:state.auth,
+    auth: state.auth,
   }
 }
 
