@@ -70,7 +70,7 @@ class Login extends Component {
         }
         const {formError} = this.state;
         return (
-            <main className="form-signin w-100 m-auto">
+            <main className="form-signin w-100 m-auto bg-light">
                 <Card>
                     <Card.Body>
                         <h1 className="h3 mb-3 fw-normal text-primary">Login</h1>

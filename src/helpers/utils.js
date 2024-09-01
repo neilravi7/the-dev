@@ -1,16 +1,3 @@
-export function requestCreator (requestMethod, requestBody) {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    const raw = JSON.stringify(requestBody); // expecting object { }
-    const requestOptions = {
-        method: requestMethod, // GET, POST, PUT, DELETE 
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow"
-      };
-    return requestOptions;
-}
-
 export function getAccessToken(){
     return window.localStorage.getItem('access');
 };
@@ -33,3 +20,21 @@ export function getUser() {
     }
     return undefined;
 };
+
+
+export function requestCreator (requestMethod, requestBody, needAuth=false) {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    if(needAuth){
+        const token = getAccessToken();
+        myHeaders.append("Authorization", `Bearer ${token}`);
+    }
+    const raw = JSON.stringify(requestBody); // expecting object { }
+    const requestOptions = {
+        method: requestMethod, // GET, POST, PUT, DELETE 
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+    return requestOptions;
+}
